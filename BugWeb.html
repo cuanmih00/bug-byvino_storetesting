@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bug WA Panel - g4nggaa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-color: #0a192f;
+      color: #e6f1ff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .container {
+      text-align: center;
+      background-color: #112240;
+      padding: 30px;
+      border-radius: 15px;
+      width: 380px;
+      box-shadow: 0 0 20px rgba(100, 255, 218, 0.2);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .container:hover {
+      box-shadow: 0 0 30px rgba(100, 255, 218, 0.3);
+    }
+    .logo {
+      width: 60px;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 5px rgba(100, 255, 218, 0.5));
+    }
+    input {
+      width: 90%;
+      padding: 12px;
+      margin: 10px auto;
+      background-color: #1f2d4a;
+      color: #e6f1ff;
+      border: 1px solid #233554;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+    input:focus {
+      outline: none;
+      border-color: #64ffda;
+      box-shadow: 0 0 8px rgba(100, 255, 218, 0.3);
+    }
+    button {
+      width: 95%;
+      padding: 12px;
+      margin-top: 10px;
+      background-color: #64ffda;
+      color: #0a192f;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      background-color: #52e8c6;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
+    }
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .btn {
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      color: #0a192f;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn.red { background-color: #ff6b6b; }
+    .btn.yellow { background-color: #ffd166; }
+    .btn.purple { background-color: #a162e8; }
+    .btn.blue { background-color: #4cc9f0; }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    .hidden {
+      display: none;
+    }
+    .error {
+      color: #ff6b6b;
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+    .success {
+      color: #64ffda;
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+    .status {
+      margin-top: 15px;
+      color: #64ffda;
+      font-weight: bold;
+    }
+    .tab-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #233554;
+    }
+    .tab {
+      padding: 10px 15px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .tab.active {
+      border-bottom: 2px solid #64ffda;
+      color: #64ffda;
+    }
+    .tab:hover {
+      color: #64ffda;
+    }
+    .history-item {
+      background-color: #1f2d4a;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 6px;
+      text-align: left;
+      font-size: 0.9em;
+      border-left: 3px solid #64ffda;
+    }
+    .history-item span {
+      display: block;
+      margin: 3px 0;
+    }
+    .history-item .time {
+      color: #8892b0;
+      font-size: 0.8em;
+    }
+    .account-list {
+      max-height: 200px;
+      overflow-y: auto;
+      margin: 15px 0;
+      border: 1px solid #233554;
+      border-radius: 6px;
+    }
+    .account-item {
+      padding: 10px;
+      border-bottom: 1px solid #233554;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .account-item:last-child {
+      border-bottom: none;
+    }
+    .delete-btn {
+      background-color: #ff6b6b;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8em;
+    }
+    .owner-controls {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #233554;
+    }
+    .logout-container {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+    }
+    .logout-btn {
+      background-color: transparent;
+      color: #ff6b6b;
+      border: 1px solid #ff6b6b;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8em;
+      transition: all 0.3s;
+    }
+    .logout-btn:hover {
+      background-color: #ff6b6b;
+      color: white;
+    }
+    .dashboard-header {
+      position: relative;
+      padding-top: 10px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="logo" alt="Logo">
+    
+    <!-- Login -->
+    <div id="login-box">
+      <h2>Login Panel</h2>
+      <input type="text" id="username" placeholder="Username">
+      <input type="password" id="password" placeholder="Password">
+      <button onclick="login()">Login</button>
+      <p id="login-error" class="error hidden">Username atau Password salah!</p>
+    </div>
+
+    <!-- User Dashboard -->
+    <div id="dashboard-box" class="hidden">
+      <div class="dashboard-header">
+        <h2>Kirim Bug WhatsApp</h2>
+        <div class="logout-container">
+          <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+      </div>
+      <input type="text" id="target" placeholder="Nomor WhatsApp (08xxxx)">
+      <div class="btn-group">
+        <button class="btn red" onclick="sendBug('chat')">💣 Bug Chat</button>
+        <button class="btn yellow" onclick="sendBug('vc')">📞 Bug VC</button>
+        <button class="btn purple" onclick="sendBug('crash')">⚠️ Bug Crash</button>
+      </div>
+      <p id="status" class="status hidden">Bug terkirim!</p>
+    </div>
+
+    <!-- Owner Dashboard -->
+    <div id="owner-dashboard" class="hidden">
+      <div class="dashboard-header">
+        <h2>Owner Dashboard</h2>
+        <div class="logout-container">
+          <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+      </div>
+      <div class="tab-container">
+        <div class="tab active" onclick="switchTab('bug-history')">Bug History</div>
+        <div class="tab" onclick="switchTab('account-manager')">Account Manager</div>
+        <div class="tab" onclick="switchTab('settings')">Settings</div>
+      </div>
+      
+      <!-- Bug History Tab -->
+      <div id="bug-history-tab" class="tab-content">
+        <h3>Recent Bug Activities</h3>
+        <div id="history-list">
+          <!-- History items will be added here dynamically -->
+        </div>
+        <button class="btn blue" onclick="clearHistory()">Clear History</button>
+      </div>
+      
+      <!-- Account Manager Tab -->
+      <div id="account-manager-tab" class="tab-content hidden">
+        <h3>User Accounts</h3>
+        <div class="account-list" id="account-list">
+          <!-- Account items will be added here dynamically -->
+        </div>
+        <div class="owner-controls">
+          <h4>Create New Account</h4>
+          <input type="text" id="new-username" placeholder="New Username">
+          <input type="password" id="new-password" placeholder="New Password">
+          <button onclick="createAccount()">Create Account</button>
+          <p id="account-message" class="success hidden"></p>
+        </div>
+      </div>
+      
+      <!-- Settings Tab -->
+      <div id="settings-tab" class="tab-content hidden">
+        <h3>Panel Settings</h3>
+        <div class="btn-group">
+          <button class="btn blue" onclick="exportData()">Export Data</button>
+          <button class="btn red" onclick="resetPanel()">Reset Panel</button>
+        </div>
+        <div class="owner-controls">
+          <h4>API Configuration</h4>
+          <input type="text" id="api-url" placeholder="API Endpoint URL">
+          <input type="text" id="api-key" placeholder="API Key">
+          <button onclick="saveApiConfig()">Save Configuration</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Database simulation
+    let users = {
+      "g4nggaa": { password: "12345", isOwner: false },
+      "admin": { password: "admin123", isOwner: false },
+      "owner": { password: "owner123", isOwner: true } // Special owner account
+    };
+    
+    let bugHistory = [];
+    let currentUser = null;
+    let apiConfig = {
+      url: "https://api.example.com",
+      key: ""
+    };
+
+    // Initialize from localStorage if available
+    if (localStorage.getItem('users')) {
+      users = JSON.parse(localStorage.getItem('users'));
+    }
+    if (localStorage.getItem('bugHistory')) {
+      bugHistory = JSON.parse(localStorage.getItem('bugHistory'));
+    }
+    if (localStorage.getItem('apiConfig')) {
+      apiConfig = JSON.parse(localStorage.getItem('apiConfig'));
+    }
+
+    function login() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const error = document.getElementById("login-error");
+
+      // Check if user exists and password matches
+      if (users[username] && users[username].password === password) {
+        currentUser = username;
+        error.classList.add("hidden");
+        
+        // Check if owner
+        if (users[username].isOwner) {
+          document.getElementById("login-box").classList.add("hidden");
+          document.getElementById("owner-dashboard").classList.remove("hidden");
+          loadOwnerDashboard();
+        } else {
+          document.getElementById("login-box").classList.add("hidden");
+          document.getElementById("dashboard-box").classList.remove("hidden");
+        }
+      } else {
+        error.classList.remove("hidden");
+      }
+    }
+
+    function logout() {
+      currentUser = null;
+      // Hide all dashboards and show login box
+      document.getElementById("dashboard-box").classList.add("hidden");
+      document.getElementById("owner-dashboard").classList.add("hidden");
+      document.getElementById("login-box").classList.remove("hidden");
+      // Clear login fields
+      document.getElementById("username").value = "";
+      document.getElementById("password").value = "";
+    }
+
+    function sendBug(type) {
+      const number = document.getElementById("target").value.trim();
+      const status = document.getElementById("status");
+
+      if (!number || !number.startsWith("08")) {
+        alert("Masukkan nomor valid (contoh: 08xxxx)");
+        return;
+      }
+
+      // Add to history
+      const timestamp = new Date().toLocaleString();
+      bugHistory.push({
+        type: type,
+        target: number,
+        user: currentUser,
+        timestamp: timestamp
+      });
+      saveToLocalStorage();
+      
+      // Update owner dashboard if open
+      if (document.getElementById("owner-dashboard").classList.contains("hidden") === false) {
+        addHistoryItem(type, number, currentUser, timestamp);
+      }
+
+      const apiUrls = {
+        chat: apiConfig.url + "/bug-chat",
+        vc: apiConfig.url + "/bug-vc",
+        crash: apiConfig.url + "/bug-crash"
+      };
+
+      fetch(apiUrls[type], {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${apiConfig.key}`
+        },
+        body: JSON.stringify({ target: number })
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+        status.innerText = `✅ Bug ${type} terkirim ke ${number}`;
+        status.classList.remove("hidden");
+        setTimeout(() => status.classList.add("hidden"), 3000);
+      })
+      .catch(err => {
+        alert("Gagal mengirim bug.");
+        console.error(err);
+      });
+    }
+
+    function loadOwnerDashboard() {
+      // Load bug history
+      const historyList = document.getElementById("history-list");
+      historyList.innerHTML = "";
+      
+      bugHistory.slice().reverse().forEach(item => {
+        addHistoryItem(item.type, item.target, item.user, item.timestamp);
+      });
+      
+      // Load accounts
+      const accountList = document.getElementById("account-list");
+      accountList.innerHTML = "";
+      
+      for (const [username, userData] of Object.entries(users)) {
+        const accountItem = document.createElement("div");
+        accountItem.className = "account-item";
+        accountItem.innerHTML = `
+          <span>${username} ${userData.isOwner ? '(Owner)' : ''}</span>
+          ${username !== "owner" ? `<button class="delete-btn" onclick="deleteAccount('${username}')">Delete</button>` : ''}
+        `;
+        accountList.appendChild(accountItem);
+      }
+      
+      // Load API config
+      document.getElementById("api-url").value = apiConfig.url;
+      document.getElementById("api-key").value = apiConfig.key;
+    }
+
+    function addHistoryItem(type, target, user, timestamp) {
+      const historyList = document.getElementById("history-list");
+      const historyItem = document.createElement("div");
+      historyItem.className = "history-item";
+      
+      const typeNames = {
+        chat: "Chat Bug",
+        vc: "VC Bug",
+        crash: "Crash Bug"
+      };
+      
+      historyItem.innerHTML = `
+        <span><strong>${typeNames[type]}</strong></span>
+        <span>Target: ${target}</span>
+        <span>User: ${user}</span>
+        <span class="time">${timestamp}</span>
+      `;
+      
+      historyList.prepend(historyItem);
+    }
+
+    function switchTab(tabName) {
+      // Update tabs
+      const tabs = document.querySelectorAll(".tab");
+      tabs.forEach(tab => tab.classList.remove("active"));
+      event.target.classList.add("active");
+      
+      // Show selected tab content
+      document.querySelectorAll(".tab-content").forEach(content => {
+        content.classList.add("hidden");
+      });
+      document.getElementById(`${tabName}-tab`).classList.remove("hidden");
+    }
+
+    function clearHistory() {
+      bugHistory = [];
+      saveToLocalStorage();
+      document.getElementById("history-list").innerHTML = "";
+    }
+
+    function createAccount() {
+      const username = document.getElementById("new-username").value.trim();
+      const password = document.getElementById("new-password").value.trim();
+      const message = document.getElementById("account-message");
+      
+      if (!username || !password) {
+        message.innerText = "Username and password required!";
+        message.className = "error";
+        message.classList.remove("hidden");
+        return;
+      }
+      
+      if (users[username]) {
+        message.innerText = "Username already exists!";
+        message.className = "error";
+        message.classList.remove("hidden");
+        return;
+      }
+      
+      users[username] = {
+        password: password,
+        isOwner: false
+      };
+      saveToLocalStorage();
+      
+      // Update account list
+      const accountList = document.getElementById("account-list");
+      const accountItem = document.createElement("div");
+      accountItem.className = "account-item";
+      accountItem.innerHTML = `
+        <span>${username}</span>
+        <button class="delete-btn" onclick="deleteAccount('${username}')">Delete</button>
+      `;
+      accountList.appendChild(accountItem);
+      
+      // Clear form
+      document.getElementById("new-username").value = "";
+      document.getElementById("new-password").value = "";
+      
+      message.innerText = "Account created successfully!";
+      message.className = "success";
+      message.classList.remove("hidden");
+      setTimeout(() => message.classList.add("hidden"), 3000);
+    }
+
+    function deleteAccount(username) {
+      if (confirm(`Are you sure you want to delete ${username}?`)) {
+        delete users[username];
+        saveToLocalStorage();
+        loadOwnerDashboard(); // Refresh the account list
+      }
+    }
+
+    function saveApiConfig() {
+      apiConfig.url = document.getElementById("api-url").value.trim();
+      apiConfig.key = document.getElementById("api-key").value.trim();
+      saveToLocalStorage();
+      
+      const message = document.getElementById("account-message");
+      message.innerText = "API configuration saved!";
+      message.className = "success";
+      message.classList.remove("hidden");
+      setTimeout(() => message.classList.add("hidden"), 3000);
+    }
+
+    function exportData() {
+      const data = {
+        users: users,
+        bugHistory: bugHistory,
+        apiConfig: apiConfig
+      };
+      
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'panel-data-export.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function resetPanel() {
+      if (confirm("Are you sure you want to reset all panel data? This cannot be undone!")) {
+        localStorage.clear();
+        users = {
+          "g4nggaa": { password: "12345", isOwner: false },
+          "admin": { password: "admin123", isOwner: false },
+          "owner": { password: "owner123", isOwner: true }
+        };
+        bugHistory = [];
+        apiConfig = {
+          url: "https://api.example.com",
+          key: ""
+        };
+        saveToLocalStorage();
+        loadOwnerDashboard();
+      }
+    }
+
+    function saveToLocalStorage() {
+      localStorage.setItem('users', JSON.stringify(users));
+      localStorage.setItem('bugHistory', JSON.stringify(bugHistory));
+      localStorage.setItem('apiConfig', JSON.stringify(apiConfig));
+    }
+  </script>
+</body>
+</html>
